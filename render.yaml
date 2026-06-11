@@ -1,0 +1,42 @@
+services:
+  # ===========================================================================
+  # Backend — Node.js / Express API
+  # ===========================================================================
+  - type: web
+    name: fletnix-backend
+    runtime: node
+    rootDir: backend
+    buildCommand: npm install
+    startCommand: npm start
+    healthCheckPath: /health
+    envVars:
+      - key: NODE_ENV
+        value: production
+      - key: PORT
+        value: 3000
+      - key: MONGODB_URI
+        sync: false   # Set this manually in Render dashboard (your Atlas URI)
+      - key: JWT_SECRET
+        sync: false   # Set this manually in Render dashboard — use a strong random string
+
+  # ===========================================================================
+  # Frontend — Angular Static Site
+  # ===========================================================================
+  - type: web
+    name: fletnix-frontend
+    runtime: static
+    rootDir: frontend
+    buildCommand: npm install && npm run build
+    staticPublishPath: dist/frontend/browser
+    headers:
+      - path: /*
+        name: Cache-Control
+        value: no-cache
+    routes:
+      # SPA fallback — send all routes to index.html for Angular routing
+      - type: rewrite
+        source: /*
+        destination: /index.html
+    envVars:
+      - key: NODE_ENV
+        value: production
