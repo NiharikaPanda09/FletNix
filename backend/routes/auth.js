@@ -35,8 +35,11 @@ router.post('/register', async (req, res) => {
     if (age < 0 || age > 120)
       return res.status(400).json({ message: 'Age must be between 0 and 120.' });
 
-    if (password.length < 6)
-      return res.status(400).json({ message: 'Password must be at least 6 characters.' });
+    const passwordRegex = /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&#])[A-Za-z\d@$!%*?&#]{8,}$/;
+    if (!passwordRegex.test(password))
+      return res.status(400).json({
+        message: 'Password must be at least 8 characters long, and contain at least one uppercase letter, one lowercase letter, one number, and one special character.'
+      });
 
     const exists = await User.findOne({ email: email.toLowerCase() });
     if (exists)
@@ -51,7 +54,7 @@ router.post('/register', async (req, res) => {
     });
 
     return res.status(201).json({
-      message: 'Account created successfully.',
+      message: 'User registered successfully',
       token:   signToken(user),
       user:    userPayload(user),
     });

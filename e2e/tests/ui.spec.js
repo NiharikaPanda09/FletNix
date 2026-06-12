@@ -13,7 +13,7 @@ test.describe('FletNix UI E2E Tests', () => {
 
     // 3. Fill in registration form (minor: age 15)
     await page.fill('input[name="email"]', uniqueEmail);
-    await page.fill('input[name="password"]', 'pass123');
+    await page.fill('input[name="password"]', 'Password123!');
     await page.fill('input[name="age"]', '15');
     await page.click('button[type="submit"]');
 
@@ -24,7 +24,7 @@ test.describe('FletNix UI E2E Tests', () => {
 
     // 5. Fill in login form
     await page.fill('input[name="email"]', uniqueEmail);
-    await page.fill('input[name="password"]', 'pass123');
+    await page.fill('input[name="password"]', 'Password123!');
     await page.click('button[type="submit"]');
 
     // 6. Verify dashboard route browse page loaded

@@ -6,31 +6,31 @@ import { AuthService, UserSession } from '../services/auth.service';
 import { ShowService, Show } from '../services/show.service';
 
 @Component({
-  selector:    'app-browse',
-  standalone:  true,
-  imports:     [CommonModule, FormsModule],
+  selector: 'app-browse',
+  standalone: true,
+  imports: [CommonModule, FormsModule],
   templateUrl: './browse.html',
 })
 export class BrowseComponent implements OnInit {
-  currentUser:   UserSession | null = null;
+  currentUser: UserSession | null = null;
 
-  shows:         Show[] = [];
-  currentPage    = 1;
+  shows: Show[] = [];
+  currentPage = 1;
   readonly limit = 15;
-  totalItems     = 0;
-  totalPages     = 0;
+  totalItems = 0;
+  totalPages = 0;
 
-  searchQuery    = '';
-  selectedType   = ''; // '' | 'Movie' | 'TV Show'
+  searchQuery = '';
+  selectedType = '';
 
-  loading        = false;
-  selectedShow:  Show | null = null;
-  loadingDetail  = false;
+  loading = false;
+  selectedShow: Show | null = null;
+  loadingDetail = false;
 
   constructor(
     private readonly authService: AuthService,
     private readonly showService: ShowService,
-    private readonly router:      Router,
+    private readonly router: Router,
   ) {}
 
   ngOnInit(): void {
@@ -45,18 +45,18 @@ export class BrowseComponent implements OnInit {
   loadShows(): void {
     this.loading = true;
     this.showService.getShows({
-      page:    this.currentPage,
-      limit:   this.limit,
-      search:  this.searchQuery,
-      type:    this.selectedType,
+      page: this.currentPage,
+      limit: this.limit,
+      search: this.searchQuery,
+      type: this.selectedType,
       userAge: this.currentUser?.age,
     }).subscribe({
       next: ({ shows, currentPage, totalItems, totalPages }) => {
-        this.shows       = shows;
+        this.shows = shows;
         this.currentPage = currentPage;
-        this.totalItems  = totalItems;
-        this.totalPages  = totalPages;
-        this.loading     = false;
+        this.totalItems = totalItems;
+        this.totalPages = totalPages;
+        this.loading = false;
       },
       error: (err) => {
         console.error('[browse] Failed to load shows:', err);
@@ -78,7 +78,7 @@ export class BrowseComponent implements OnInit {
 
   filterType(type: string): void {
     this.selectedType = type;
-    this.currentPage  = 1;
+    this.currentPage = 1;
     this.loadShows();
   }
 
@@ -91,7 +91,7 @@ export class BrowseComponent implements OnInit {
   getPageNumbers(): number[] {
     const MAX_PAGES = 5;
     let start = Math.max(1, this.currentPage - 2);
-    let end   = Math.min(this.totalPages, start + MAX_PAGES - 1);
+    let end = Math.min(this.totalPages, start + MAX_PAGES - 1);
 
     if (end - start < MAX_PAGES - 1) {
       start = Math.max(1, end - MAX_PAGES + 1);
@@ -102,11 +102,11 @@ export class BrowseComponent implements OnInit {
 
   viewShowDetails(show: Show): void {
     this.loadingDetail = true;
-    this.selectedShow  = null;
+    this.selectedShow = null;
 
     this.showService.getShowById(show._id).subscribe({
       next: (res) => {
-        this.selectedShow  = res;
+        this.selectedShow = res;
         this.loadingDetail = false;
       },
       error: (err) => {

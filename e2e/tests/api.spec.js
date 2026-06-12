@@ -10,7 +10,7 @@ test.describe('FletNix Backend API E2E Tests', () => {
     const response = await request.post(`${apiURL}/auth/register`, {
       data: {
         email: uniqueEmail,
-        password: 'password123',
+        password: 'Password123!',
         age: 20
       }
     });
@@ -28,13 +28,13 @@ test.describe('FletNix Backend API E2E Tests', () => {
     const response = await request.post(`${apiURL}/auth/login`, {
       data: {
         email: uniqueEmail,
-        password: 'password123'
+        password: 'Password123!'
       }
     });
 
     expect(response.status()).toBe(200);
     const body = await response.json();
-    expect(body.message).toBe('Login successful');
+    expect(body.message).toBe('Login successful.');
     expect(body.user).toBeDefined();
     expect(body.user.email).toBe(uniqueEmail);
   });

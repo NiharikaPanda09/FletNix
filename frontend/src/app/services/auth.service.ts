@@ -4,13 +4,13 @@ import { Observable, tap } from 'rxjs';
 import { environment } from '../../environments/environment';
 
 export interface UserSession {
-  id:    string;
+  id: string;
   email: string;
-  age:   number;
+  age: number;
 }
 
 const STORAGE_KEYS = {
-  user:  'fletnix_user',
+  user: 'fletnix_user',
   token: 'fletnix_token',
 } as const;
 
@@ -19,7 +19,7 @@ export class AuthService {
   private readonly apiUrl = `${environment.apiUrl}/auth`;
 
   readonly currentUser = signal<UserSession | null>(this.loadSession());
-  readonly isLoggedIn  = computed(() => this.currentUser() !== null);
+  readonly isLoggedIn = computed(() => this.currentUser() !== null);
 
   constructor(private http: HttpClient) {}
 
@@ -49,7 +49,7 @@ export class AuthService {
   }
 
   setSession(user: UserSession, token: string): void {
-    localStorage.setItem(STORAGE_KEYS.user,  JSON.stringify(user));
+    localStorage.setItem(STORAGE_KEYS.user, JSON.stringify(user));
     localStorage.setItem(STORAGE_KEYS.token, token);
     this.currentUser.set(user);
   }

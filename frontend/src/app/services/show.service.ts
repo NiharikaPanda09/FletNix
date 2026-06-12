@@ -4,34 +4,34 @@ import { Observable } from 'rxjs';
 import { environment } from '../../environments/environment';
 
 export interface Show {
-  _id:          string;
-  show_id:      string;
-  type:         string;
-  title:        string;
-  director?:    string;
-  cast?:        string;
-  country?:     string;
-  date_added?:  string;
+  _id: string;
+  show_id: string;
+  type: string;
+  title: string;
+  director?: string;
+  cast?: string;
+  country?: string;
+  date_added?: string;
   release_year: number;
-  rating?:      string;
-  duration?:    string;
-  listed_in?:   string;
+  rating?: string;
+  duration?: string;
+  listed_in?: string;
   description?: string;
 }
 
 export interface PaginatedShowsResponse {
-  shows:       Show[];
+  shows: Show[];
   currentPage: number;
-  limit:       number;
-  totalItems:  number;
-  totalPages:  number;
+  limit: number;
+  totalItems: number;
+  totalPages: number;
 }
 
 export interface ShowsFilter {
-  page?:    number;
-  limit?:   number;
-  search?:  string;
-  type?:    string;
+  page?: number;
+  limit?: number;
+  search?: string;
+  type?: string;
   userAge?: number;
 }
 
@@ -45,10 +45,10 @@ export class ShowService {
     let params = new HttpParams();
 
     const entries: [string, string | number | undefined][] = [
-      ['page',    filters.page],
-      ['limit',   filters.limit],
-      ['search',  filters.search],
-      ['type',    filters.type],
+      ['page', filters.page],
+      ['limit', filters.limit],
+      ['search', filters.search],
+      ['type', filters.type],
       ['userAge', filters.userAge],
     ];
 

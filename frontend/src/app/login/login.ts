@@ -5,25 +5,25 @@ import { Router } from '@angular/router';
 import { AuthService } from '../services/auth.service';
 
 @Component({
-  selector:    'app-login',
-  standalone:  true,
-  imports:     [CommonModule, FormsModule],
+  selector: 'app-login',
+  standalone: true,
+  imports: [CommonModule, FormsModule],
   templateUrl: './login.html',
 })
 export class LoginComponent {
   isLoginMode = true;
 
-  email    = '';
+  email = '';
   password = '';
-  age:       number | null = null;
+  age: number | null = null;
 
-  errorMessage   = '';
+  errorMessage = '';
   successMessage = '';
-  loading        = false;
+  loading = false;
 
   constructor(
     private readonly authService: AuthService,
-    private readonly router:      Router,
+    private readonly router: Router,
   ) {
     if (this.authService.isLoggedIn()) {
       this.router.navigate(['/browse']);
@@ -31,16 +31,16 @@ export class LoginComponent {
   }
 
   toggleMode(): void {
-    this.isLoginMode     = !this.isLoginMode;
-    this.errorMessage    = '';
-    this.successMessage  = '';
-    this.email           = '';
-    this.password        = '';
-    this.age             = null;
+    this.isLoginMode = !this.isLoginMode;
+    this.errorMessage = '';
+    this.successMessage = '';
+    this.email = '';
+    this.password = '';
+    this.age = null;
   }
 
   onSubmit(): void {
-    this.errorMessage   = '';
+    this.errorMessage = '';
     this.successMessage = '';
 
     if (!this.email || !this.password) {
@@ -53,11 +53,17 @@ export class LoginComponent {
       return;
     }
 
+    if (!this.isLoginMode) {
+      const passwordRegex = /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&#])[A-Za-z\d@$!%*?&#]{8,}$/;
+      if (!passwordRegex.test(this.password)) {
+        this.errorMessage = 'Password must be at least 8 characters long, and contain at least one uppercase letter, one lowercase letter, one number, and one special character.';
+        return;
+      }
+    }
+
     this.loading = true;
     this.isLoginMode ? this.doLogin() : this.doRegister();
   }
-
-  // ─── Private ───────────────────────────────────────────────────────────────
 
   private doLogin(): void {
     this.authService.login({ email: this.email, password: this.password }).subscribe({
@@ -66,7 +72,7 @@ export class LoginComponent {
         this.router.navigate(['/browse']);
       },
       error: (err) => {
-        this.loading      = false;
+        this.loading = false;
         this.errorMessage = err.error?.message ?? 'Login failed. Please check your credentials.';
       },
     });
@@ -74,21 +80,21 @@ export class LoginComponent {
 
   private doRegister(): void {
     this.authService.register({
-      email:    this.email,
+      email: this.email,
       password: this.password,
-      age:      this.age as number,
+      age: this.age as number,
     }).subscribe({
       next: () => {
-        this.loading        = false;
-        this.successMessage = 'Account created! You can now sign in.';
+        this.loading = false;
+        this.successMessage = 'Registration successful! You can now log in.';
         setTimeout(() => {
-          this.isLoginMode    = true;
+          this.isLoginMode = true;
           this.successMessage = '';
-          this.password       = '';
+          this.password = '';
         }, 1500);
       },
       error: (err) => {
-        this.loading      = false;
+        this.loading = false;
         this.errorMessage = err.error?.message ?? 'Registration failed. Try a different email.';
       },
     });

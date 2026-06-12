@@ -8,7 +8,7 @@ module.exports = defineConfig({
   workers: 1, // run sequentially to avoid auth/db conflicts during tests
   reporter: 'list',
   use: {
-    baseURL: 'http://127.0.0.1:4200',
+    baseURL: 'http://localhost:4200',
     trace: 'on-first-retry',
   },
   projects: [
